@@ -2,11 +2,8 @@ package io.java;
 
 import io.java.concurrent.Count;
 
-import java.io.InterruptedIOException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class Main {
 
@@ -27,12 +24,24 @@ public class Main {
                 e.printStackTrace();
             }
         };
+        Count c = new Count();
+        Runnable t3 = () -> {
+            try {
+                c.incCCounter();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
 
 
         ExecutorService service = Executors.newFixedThreadPool(2);
         System.out.println(" starting thread ...");
         service.submit(t1);
+        service.submit(t3);
         service.submit(t2);
+        service.submit(t2);
+        service.submit(t3);
+        service.submit(t3);
         service.shutdown();
 
     }
